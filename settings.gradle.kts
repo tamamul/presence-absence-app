@@ -4,7 +4,7 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
 
-        // repo nexus custom
+        // Nexus private (pakai auth kalau ada local.properties)
         val localProperties = java.util.Properties()
         val localFile = file("local.properties")
         if (localFile.exists()) {
@@ -19,8 +19,32 @@ pluginManagement {
             }
         }
 
-        // jitpack
-        maven { url = uri("https://jitpack.io") }
+        maven("https://jitpack.io")
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+
+        // Nexus private
+        val localProperties = java.util.Properties()
+        val localFile = file("local.properties")
+        if (localFile.exists()) {
+            localProperties.load(java.io.FileInputStream(localFile))
+
+            maven {
+                url = uri("https://inexus.samentic.com/repository/samentic-android/")
+                credentials {
+                    username = localProperties["nexus.username"] as? String
+                    password = localProperties["nexus.password"] as? String
+                }
+            }
+        }
+
+        maven("https://jitpack.io")
     }
 }
 
