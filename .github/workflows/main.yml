@@ -28,7 +28,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # Inject google-services.json dari Secrets
+      - name: Setup local.properties
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          echo "sdk.dir=$ANDROID_HOME" > app/local.properties
+
       - name: Decode google-services.json
         run: |
           echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
